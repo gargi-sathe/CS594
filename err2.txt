@@ -1,0 +1,199 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.7, pytest-7.4.4, pluggy-1.0.0
+rootdir: C:\Users\gargi\OneDrive\Desktop\Masters\Work\CS594\project
+plugins: anyio-4.9.0, dash-3.0.3, langsmith-0.3.18, typeguard-4.4.4
+collected 3 items
+
+tests\test_phase1_realmap.py FFF                                         [100%]
+
+================================== FAILURES ===================================
+______________________ test_realmap_candidate_generation ______________________
+
+mock_osmnx_graph = None
+realmap_config = {'run_config': {'costs': {'driver_hourly': 20.0, 'order_op_cost': 2.5, 'warehouse_base': 100.0}, 'entities': {'num_dri...om_subsample', 'candidate_subsample_size': 4, 'demand_distribution': 'hotspot', 'osmnx_place': 'MockPlace', ...}, ...}}
+
+    def test_realmap_candidate_generation(mock_osmnx_graph, realmap_config):
+        from src.rl.scenario_sampler import ScenarioSampler
+        from src.rl.warehouse_env import WarehousePlacementEnv
+    
+        sampler = ScenarioSampler(realmap_config)
+    
+        # 1. Test random_subsample
+        env = WarehousePlacementEnv(sampler, max_candidates=10)
+>       env.reset(seed=42)
+
+tests\test_phase1_realmap.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\rl\warehouse_env.py:97: in reset
+    cand_feats = build_candidate_features(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+candidates = [12, 8, 11, 6]
+G = <networkx.classes.graph.Graph object at 0x000001976CD4E7E0>
+apsp = <src.routing.graph_builder.RoutingCache object at 0x000001976CF03530>
+selected_indices = []
+config = RunConfig(seed=42, mode='synthetic', run_horizon_mins=30, map=MapConfig(type='osmnx', grid_size=None, osmnx_place='Moc...1, buckets={'MockPlace': 15.0}, output_dir='results/test_realmap', model_path='DOES_NOT_EXIST.zip'), stress_tests=None)
+
+    def build_candidate_features(
+        candidates: List[Any],
+        G: Any,
+        apsp: Dict[Any, Dict[Any, float]],
+        selected_indices: List[int],
+        config: Any
+    ) -> np.ndarray:
+        """Returns candidate_features: float32[N_candidates, 8]"""
+        N = len(candidates)
+        feats = np.zeros((N, 8), dtype=np.float32)
+    
+        # Grid sizes tracking
+        if config.map.type == "grid":
+            max_width = max(config.map.grid_size[0] - 1, 1)
+            max_height = max(config.map.grid_size[1] - 1, 1)
+        else:
+            # Generic map fallback
+            xs = [d.get("x", 0.0) for n, d in G.nodes(data=True)]
+            ys = [d.get("y", 0.0) for n, d in G.nodes(data=True)]
+            min_x, max_x_val = min(xs) if xs else 0.0, max(xs) if xs else 1.0
+            min_y, max_y_val = min(ys) if ys else 0.0, max(ys) if ys else 1.0
+            max_width = max(max_x_val - min_x, 1)
+            max_height = max(max_y_val - min_y, 1)
+    
+        # Graph maximum shortest-path tracking and max degree
+        max_dist = 1.0
+        if apsp:
+>           max_dist = max((dist for row in apsp.values() for dist in row.values()), default=1.0)
+E           AttributeError: 'RoutingCache' object has no attribute 'values'
+
+src\rl\observation_builder.py:66: AttributeError
+________________________ test_frozen_osmnx_determinism ________________________
+
+mock_osmnx_graph = None
+realmap_config = {'run_config': {'costs': {'driver_hourly': 20.0, 'order_op_cost': 2.5, 'warehouse_base': 100.0}, 'entities': {'num_dri...om_subsample', 'candidate_subsample_size': 4, 'demand_distribution': 'hotspot', 'osmnx_place': 'MockPlace', ...}, ...}}
+
+    def test_frozen_osmnx_determinism(mock_osmnx_graph, realmap_config):
+        from src.eval.run_evaluation import generate_frozen_scenarios
+    
+        cfg1 = parse_config(realmap_config)
+>       scenarios1 = generate_frozen_scenarios(realmap_config, {"MockPlace": 15.0}, 1)
+
+tests\test_phase1_realmap.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\eval\run_evaluation.py:131: in generate_frozen_scenarios
+    env.reset(seed=cfg_seed)
+src\rl\warehouse_env.py:97: in reset
+    cand_feats = build_candidate_features(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+candidates = [12, 8, 11, 6]
+G = <networkx.classes.graph.Graph object at 0x0000019726B394C0>
+apsp = <src.routing.graph_builder.RoutingCache object at 0x00000197258E5DF0>
+selected_indices = []
+config = RunConfig(seed=42, mode='synthetic', run_horizon_mins=30, map=MapConfig(type='osmnx', grid_size=None, osmnx_place='Moc...1, buckets={'MockPlace': 15.0}, output_dir='results/test_realmap', model_path='DOES_NOT_EXIST.zip'), stress_tests=None)
+
+    def build_candidate_features(
+        candidates: List[Any],
+        G: Any,
+        apsp: Dict[Any, Dict[Any, float]],
+        selected_indices: List[int],
+        config: Any
+    ) -> np.ndarray:
+        """Returns candidate_features: float32[N_candidates, 8]"""
+        N = len(candidates)
+        feats = np.zeros((N, 8), dtype=np.float32)
+    
+        # Grid sizes tracking
+        if config.map.type == "grid":
+            max_width = max(config.map.grid_size[0] - 1, 1)
+            max_height = max(config.map.grid_size[1] - 1, 1)
+        else:
+            # Generic map fallback
+            xs = [d.get("x", 0.0) for n, d in G.nodes(data=True)]
+            ys = [d.get("y", 0.0) for n, d in G.nodes(data=True)]
+            min_x, max_x_val = min(xs) if xs else 0.0, max(xs) if xs else 1.0
+            min_y, max_y_val = min(ys) if ys else 0.0, max(ys) if ys else 1.0
+            max_width = max(max_x_val - min_x, 1)
+            max_height = max(max_y_val - min_y, 1)
+    
+        # Graph maximum shortest-path tracking and max degree
+        max_dist = 1.0
+        if apsp:
+>           max_dist = max((dist for row in apsp.values() for dist in row.values()), default=1.0)
+E           AttributeError: 'RoutingCache' object has no attribute 'values'
+
+src\rl\observation_builder.py:66: AttributeError
+_________________________ test_tiny_realmap_eval_loop _________________________
+
+mock_osmnx_graph = None
+realmap_config = {'run_config': {'costs': {'driver_hourly': 20.0, 'order_op_cost': 2.5, 'warehouse_base': 100.0}, 'entities': {'num_dri...om_subsample', 'candidate_subsample_size': 4, 'demand_distribution': 'hotspot', 'osmnx_place': 'MockPlace', ...}, ...}}
+
+    def test_tiny_realmap_eval_loop(mock_osmnx_graph, realmap_config):
+        import yaml
+        os.makedirs("configs", exist_ok=True)
+        with open("configs/test_realmap.yaml", "w") as f:
+            yaml.dump(realmap_config, f)
+    
+        from src.eval.run_evaluation import run_evaluation
+>       run_evaluation("configs/test_realmap.yaml")
+
+tests\test_phase1_realmap.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\eval\run_evaluation.py:165: in run_evaluation
+    scenarios = generate_frozen_scenarios(raw_config, cfg.eval.buckets, cfg.eval.scenarios_per_bucket)
+src\eval\run_evaluation.py:131: in generate_frozen_scenarios
+    env.reset(seed=cfg_seed)
+src\rl\warehouse_env.py:97: in reset
+    cand_feats = build_candidate_features(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+candidates = [12, 8, 11, 6]
+G = <networkx.classes.graph.Graph object at 0x0000019726B3B470>
+apsp = <src.routing.graph_builder.RoutingCache object at 0x0000019726B3A270>
+selected_indices = []
+config = RunConfig(seed=42, mode='synthetic', run_horizon_mins=30, map=MapConfig(type='osmnx', grid_size=None, osmnx_place='Moc...1, buckets={'MockPlace': 15.0}, output_dir='results/test_realmap', model_path='DOES_NOT_EXIST.zip'), stress_tests=None)
+
+    def build_candidate_features(
+        candidates: List[Any],
+        G: Any,
+        apsp: Dict[Any, Dict[Any, float]],
+        selected_indices: List[int],
+        config: Any
+    ) -> np.ndarray:
+        """Returns candidate_features: float32[N_candidates, 8]"""
+        N = len(candidates)
+        feats = np.zeros((N, 8), dtype=np.float32)
+    
+        # Grid sizes tracking
+        if config.map.type == "grid":
+            max_width = max(config.map.grid_size[0] - 1, 1)
+            max_height = max(config.map.grid_size[1] - 1, 1)
+        else:
+            # Generic map fallback
+            xs = [d.get("x", 0.0) for n, d in G.nodes(data=True)]
+            ys = [d.get("y", 0.0) for n, d in G.nodes(data=True)]
+            min_x, max_x_val = min(xs) if xs else 0.0, max(xs) if xs else 1.0
+            min_y, max_y_val = min(ys) if ys else 0.0, max(ys) if ys else 1.0
+            max_width = max(max_x_val - min_x, 1)
+            max_height = max(max_y_val - min_y, 1)
+    
+        # Graph maximum shortest-path tracking and max degree
+        max_dist = 1.0
+        if apsp:
+>           max_dist = max((dist for row in apsp.values() for dist in row.values()), default=1.0)
+E           AttributeError: 'RoutingCache' object has no attribute 'values'
+
+src\rl\observation_builder.py:66: AttributeError
+---------------------------- Captured stdout call -----------------------------
+Warning: RL Model not found at DOES_NOT_EXIST.zip. RL evaluation will be skipped.
+============================== warnings summary ===============================
+tests/test_phase1_realmap.py::test_frozen_osmnx_determinism
+  <frozen importlib._bootstrap>:488: DeprecationWarning: Type google.protobuf.pyext._message.ScalarMapContainer uses PyType_Spec with a metaclass that has custom tp_new. This is deprecated and will no longer be allowed in Python 3.14.
+
+tests/test_phase1_realmap.py::test_frozen_osmnx_determinism
+  <frozen importlib._bootstrap>:488: DeprecationWarning: Type google.protobuf.pyext._message.MessageMapContainer uses PyType_Spec with a metaclass that has custom tp_new. This is deprecated and will no longer be allowed in Python 3.14.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_phase1_realmap.py::test_realmap_candidate_generation - Attr...
+FAILED tests/test_phase1_realmap.py::test_frozen_osmnx_determinism - Attribut...
+FAILED tests/test_phase1_realmap.py::test_tiny_realmap_eval_loop - AttributeE...
+======================== 3 failed, 2 warnings in 8.28s ========================

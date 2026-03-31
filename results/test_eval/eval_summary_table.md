@@ -1,0 +1,6 @@
+# Evaluation Summary Table
+| bucket   | method     |   on_time_delivery_rate |   delivered_success_rate |   p90_delivery_time |   p95_delivery_time |   orders_missed_or_unserved |   cost_per_order |   driver_utilization |
+|:---------|:-----------|------------------------:|-------------------------:|--------------------:|--------------------:|----------------------------:|-----------------:|---------------------:|
+| Low      | Clustering |                1        |                 1        |             4       |             4       |                           0 |          23.4091 |             0.507883 |
+| Low      | Greedy     |                0.909091 |                 0.909091 |             6.10063 |             6.10063 |                           1 |          23.1818 |             0.566565 |
+| Low      | Random     |                0.909091 |                 0.909091 |             5.02846 |             5.02846 |                           1 |          23.1818 |             0.558192 |

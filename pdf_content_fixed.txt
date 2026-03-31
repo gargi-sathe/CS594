@@ -1,0 +1,217 @@
+
+--- Page 1 ---
+UrbanScale: Robust Sectoring and 
+Staging for Q-Commerce via 
+Reinforcement Learning
+Team Name: RouteRush
+Pranali Gole
+pgole@uic.edu
+Gargi Sathe
+gsath4@uic.edu
+Team Members:
+Vaishnavi Jadhav
+vjadh4@uic.edu
+
+--- Page 2 ---
+Idea 
+The central idea of this 
+project is to move 
+beyond optimizing 
+individual delivery routes 
+and instead design the 
+entire delivery system so 
+that ultra-fast delivery 
+(10–15 minutes) becomes 
+achievable by 
+construction.
+The Problem
+The core problem is not 
+routing; it is system 
+design: where to place 
+warehouses, how to 
+position drivers, and 
+how to structure the 
+network so fast delivery 
+is even possible.
+Significance
+Capital efficiency in 
+ultra-fast logistics relies 
+strictly on Service Level 
+Agreement (SLA) 
+adherence without 
+unbounded driver 
+subsidies. System design 
+must account for 
+operational variance.
+Hypothesis
+Even with sufficient total 
+drivers (D), poor spatial 
+distribution of drivers and 
+warehouses leads to 
+localized shortages, which 
+significantly increases 
+delivery times.
+A system that dynamically 
+aligns driver positioning 
+and warehouse placement 
+with demand hotspots will 
+reduce delays and improve 
+10–15 minute delivery 
+success rates.
+Problem
+
+--- Page 3 ---
+System Design: How it works
+Strategic Layer: Warehouse Placement
+(Reinforcement Learning)
+Tactical Layer: Driving and Sectoring Tactical Layer: Driver Sectoring & Staging
+(Heuristics -> RL)
+Operational Layer: Dispatching and Routing
+(Heuristics -> RL)
+
+--- Page 4 ---
+Evaluation Plan
+Key Metrics Stress Test Scenarios Baselines We Compare 
+Against
+● On-time delivery rate (% 
+of orders within 10–15 min 
+target)
+● Tail latency (p90 and p95 
+delivery times)
+● Cost per order 
+(warehouse + driver cost)
+● Orders missed or rejected
+● Demand spike in one 
+region
+● Driver shortage (fewer 
+drivers available)
+● Warehouse closure (one 
+hub goes offline)
+● Time-of-day demand 
+shifts (morning vs evening 
+patterns)
+● Demand-only clustering 
+for warehouse placement
+● Coverage-based heuristic 
+placement
+● Nearest-warehouse 
+Voronoi for sectoring
+● Nearest feasible driver for 
+dispatch
+
+--- Page 5 ---
+Existing Software
+Software & Tools
+We will build our system using a combination 
+of real-world map data, simulation, and 
+optimization tools:
+● OpenStreetMap + OSMnx: to 
+construct realistic city road networks 
+and travel-time graphs [link]
+● SimPy: to build a discrete-event 
+simulator for orders, warehouses, and 
+drivers. [link]
+● NetworkX: for graph operations and 
+shortest-path routing [link]
+● Google OR-Tools (baseline): for 
+assignment and routing heuristics. 
+[link]
+● RL frameworks (later phase): 
+Gymnasium-compatible environment 
+for training agents. [link]
+Access & Feasibility
+● All tools and datasets are public, 
+open-source, and readily accessible
+● No dependency on proprietary or 
+restricted data
+Paper References:
+● Guo et al. (2025). Unified and 
+Generalizable RL for Facility Location 
+on Graphs. [link]
+● Su et al. (2024). Large-scale Urban 
+Facility Location Selection with 
+Knowledge-informed RL. [link]
+● Li et al. (2021). A Hierarchical RL 
+Based Optimization Framework for 
+Large-scale Dynamic Pickup and 
+Delivery. [link]
+Data Sources
+● Road network: OpenStreetMap 
+(real city layouts and travel times) 
+[link]
+● Demand patterns:
+○ U.S. Census (population 
+density as spatial demand 
+proxy) [link]
+○ Public trip datasets (e.g., 
+NYC TLC / Chicago TNP) for 
+temporal demand patterns
+○ [link]
+● Synthetic demand generator: to 
+model controlled scenarios (peaks, 
+hotspots, shifts)
+
+--- Page 6 ---
+Approach
+Overall Approach
+We model the system as a hierarchical 
+delivery optimization problem, with 
+decisions at three levels:
+● Strategic: Warehouse placement 
+(learned using RL)
+● Tactical: Driver sectoring and 
+staging (heuristics → RL extension)
+● Operational: Dispatching and 
+routing (heuristics → RL extension)
+This structure ensures a working system 
+early, while enabling meaningful research 
+contributions.
+Proposed Scope
+The core project focuses on building and 
+evaluating a simulation-based delivery 
+system:
+● Develop a city-scale simulator 
+(map, demand, drivers, 
+warehouses)
+● Implement a complete heuristic 
+pipeline for sectoring, dispatching, 
+and routing
+● Introduce RL for warehouse 
+placement
+● Evaluate performance using:
+○ On-time delivery rate 
+(10–15 min target)
+○ Tail latency (p90/p95 
+delivery times)
+○ Robustness under 
+demand and supply 
+variations
+Next Steps
+1. Build simulator and baseline pipeline
+2. Define evaluation metrics and test 
+scenarios
+3. Train RL agent for warehouse 
+placement
+4. Compare against heuristic baselines
+5. Extend to more advanced 
+components if time allows
+End Result
+● Input: city map + demand + K 
+warehouses + D drivers
+● Output: warehouse locations + 
+delivery policy
+● Goal: maximize % of orders delivered 
+within 10–15 min
+
+
+--- Page 7 ---
+Roles & Coordination:
+Roles
+● Pranali Gole - RL Warehouse placement
+● Gargi Sathe - Driver sectoring and staging
+● Vaishnavi Jadhav - RL simulator and documentation
+Development Effort & Timeline
+● We begin with a simplified simulator (static travel times, no driver acceptance)((Weeks 1–2)
+● Phase 2 (Weeks 3–5): RL Warehouse Placement. 
+● Phase 3 (Weeks 5-7): Driver Placement and later exploring RL. 
+● Phase 4 (Weeks 7-8): Robustness and Stress testing.

@@ -1,0 +1,39 @@
+run_config:
+  costs:
+    driver_hourly: 20.0
+    order_op_cost: 2.5
+    warehouse_base: 100.0
+  entities:
+    num_drivers: 3
+    num_warehouses: 2
+  eval:
+    buckets:
+      Low: 15.0
+    model_path: DOES_NOT_EXIST.zip
+    output_dir: results/test_eval
+    scenarios_per_bucket: 1
+  map:
+    grid_size:
+    - 3
+    - 3
+    type: grid
+  mode: synthetic
+  outputs:
+    output_dir: results/test
+  parameters:
+    delivery_target_mins: 10.0
+    order_lambda: 15.0
+    pick_pack_time_mins: 2.0
+  policies:
+    dispatch: baseline
+    staging: baseline
+  reward_weights:
+    cost_norm_ref: 100.0
+    weight_cost: 0.1
+    weight_delivered_success: 0.5
+    weight_missed_rate: 1.0
+    weight_on_time: 2.0
+    weight_tail_penalty: 0.5
+  run_horizon_mins: 30
+  seed: 42
+  training: {}

@@ -1,0 +1,83 @@
+﻿Reading PDF: RL Proposal.pdf
+
+--- Page 1 ---
+UrbanScale: Robust Sectoring and 
+Staging for Q-Commerce via 
+Reinforcement Learning
+Team Name: RouteRush
+Pranali Gole
+pgole@uic.edu
+Gargi Sathe
+gsath4@uic.edu
+Team Members:
+Vaishnavi Jadhav
+vjadh4@uic.edu
+
+--- Page 2 ---
+Idea 
+The central idea of this 
+project is to move 
+beyond optimizing 
+individual delivery routes 
+and instead design the 
+entire delivery system so 
+that ultra-fast delivery 
+(10û15 minutes) becomes 
+achievable by 
+construction.
+The Problem
+The core problem is not 
+routing; it is system 
+design: where to place 
+warehouses, how to 
+position drivers, and 
+how to structure the 
+network so fast delivery 
+is even possible.
+Significance
+Capital efficiency in 
+ultra-fast logistics relies 
+strictly on Service Level 
+Agreement (SLA) 
+adherence without 
+unbounded driver 
+subsidies. System design 
+must account for 
+operational variance.
+Hypothesis
+Even with sufficient total 
+drivers (D), poor spatial 
+distribution of drivers and 
+warehouses leads to 
+localized shortages, which 
+significantly increases 
+delivery times.
+A system that dynamically 
+aligns driver positioning 
+and warehouse placement 
+with demand hotspots will 
+reduce delays and improve 
+10û15 minute delivery 
+success rates.
+Problem
+
+--- Page 3 ---
+System Design: How it works
+Strategic Layer: Warehouse Placement
+(Reinforcement Learning)
+Tactical Layer: Driving and Sectoring Tactical Layer: Driver Sectoring & Staging
+(Heuristics -> RL)
+Operational Layer: Dispatching and Routing
+(Heuristics -> RL)
+
+--- Page 4 ---
+Error extracting text from page 4: 'charmap' codec can't encode character '\u25cf' in position 83: character maps to <undefined>
+
+--- Page 5 ---
+Error extracting text from page 5: 'charmap' codec can't encode character '\u25cf' in position 147: character maps to <undefined>
+
+--- Page 6 ---
+Error extracting text from page 6: 'charmap' codec can't encode character '\u25cf' in position 134: character maps to <undefined>
+
+--- Page 7 ---
+Error extracting text from page 7: 'charmap' codec can't encode character '\u25cf' in position 30: character maps to <undefined>

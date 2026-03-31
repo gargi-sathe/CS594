@@ -1,0 +1,15 @@
+{
+    "average_delivery_time": 9.78605098780508,
+    "average_pick_pack_time": 2.0,
+    "average_queue_time": 0.7058528547557875,
+    "average_travel_to_customer_time": 7.2631578947368425,
+    "delivered_count": 57,
+    "delivered_success_rate": 0.9344262295081968,
+    "driver_utilization": 0.8083293161665679,
+    "on_time_delivery_rate": 0.8360655737704918,
+    "orders_missed_or_unserved": 4,
+    "p50_delivery_time": 10.0,
+    "p90_delivery_time": 14.066466561063187,
+    "p95_delivery_time": 17.0,
+    "simple_cost_estimate": 2514.0
+}

@@ -1,0 +1,9 @@
+{
+    "delivered_success_rate": 0.9166666666666666,
+    "mode": "real_map",
+    "on_time_delivery_rate": 0.9166666666666666,
+    "run_id": "real_demo",
+    "seed": 42,
+    "simple_cost_estimate": 2266.0,
+    "total_orders_generated": 36
+}

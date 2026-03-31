@@ -1,0 +1,44 @@
+run_config:
+  costs:
+    driver_hourly: 20.0
+    order_op_cost: 2.5
+    warehouse_base: 100.0
+  entities:
+    num_drivers: 5
+    num_warehouses: 3
+  map:
+    grid_size:
+    - 5
+    - 5
+    type: grid
+  mode: synthetic
+  outputs:
+    output_dir: results/test
+  parameters:
+    delivery_target_mins: 15.0
+    order_lambda: 30.0
+    pick_pack_time_mins: 2.0
+  policies:
+    dispatch: baseline
+    staging: baseline
+  reward_weights:
+    cost_norm_ref: 100.0
+    weight_cost: 0.1
+    weight_delivered_success: 0.5
+    weight_missed_rate: 1.0
+    weight_on_time: 2.0
+    weight_tail_penalty: 0.5
+  run_horizon_mins: 120.0
+  seed: 42
+  training:
+    batch_size: 4
+    checkpoint_dir: logs/checkpoints/
+    checkpoint_freq: 50
+    device: auto
+    learning_rate: 0.0003
+    log_dir: logs/tb/
+    n_steps: 16
+    policy_name: MultiInputPolicy
+    seed: 42
+    tensorboard_log_name: MaskablePPO_smoke
+    total_timesteps: 50

@@ -1,0 +1,25 @@
+run_config:
+  seed: 42
+  mode: real_map
+  run_horizon_mins: 60.0
+  map:
+    type: osmnx
+    grid_size: [0, 0]
+    osmnx_place: "Piedmont, California, USA" 
+  entities:
+    num_warehouses: 2
+    num_drivers: 10
+  parameters:
+    delivery_target_mins: 15.0
+    pick_pack_time_mins: 2.0
+    order_lambda: 30.0
+  policies:
+    staging: sector_centroid
+    dispatch: nearest_idle
+  costs:
+    warehouse_base: 1000.0
+    driver_hourly: 20.0
+    order_op_cost: 2.0
+  outputs:
+    output_dir: results
+  stress_tests: null

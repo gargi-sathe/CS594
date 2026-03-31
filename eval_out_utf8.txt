@@ -1,0 +1,73 @@
+﻿python : C:\Users\gargi\anaconda3\Lib\site-packag
+es\sklearn\cluster\_kmeans.py:1419: UserWarning: 
+KMeans is known to have a memory leak on Windows 
+with MKL, when there are less chunks than 
+available threads. You can avoid it by setting 
+the environment variable OMP_NUM_THREADS=1.
+At line:1 char:1
++ python -m src.eval.run_evaluation --config 
+configs/eval_synthetic.yam ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\ 
+   Users\gargi\..._NUM_THREADS=1.:String) [], R  
+  emoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  warnings.warn(
+C:\Users\gargi\anaconda3\Lib\site-packages\sklear
+n\cluster\_kmeans.py:1419: UserWarning: KMeans 
+is known to have a memory leak on Windows with 
+MKL, when there are less chunks than available 
+threads. You can avoid it by setting the 
+environment variable OMP_NUM_THREADS=1.
+  warnings.warn(
+C:\Users\gargi\anaconda3\Lib\site-packages\sklear
+n\cluster\_kmeans.py:1419: UserWarning: KMeans 
+is known to have a memory leak on Windows with 
+MKL, when there are less chunks than available 
+threads. You can avoid it by setting the 
+environment variable OMP_NUM_THREADS=1.
+  warnings.warn(
+C:\Users\gargi\anaconda3\Lib\site-packages\sklear
+n\cluster\_kmeans.py:1419: UserWarning: KMeans 
+is known to have a memory leak on Windows with 
+MKL, when there are less chunks than available 
+threads. You can avoid it by setting the 
+environment variable OMP_NUM_THREADS=1.
+  warnings.warn(
+C:\Users\gargi\anaconda3\Lib\site-packages\sklear
+n\cluster\_kmeans.py:1419: UserWarning: KMeans 
+is known to have a memory leak on Windows with 
+MKL, when there are less chunks than available 
+threads. You can avoid it by setting the 
+environment variable OMP_NUM_THREADS=1.
+  warnings.warn(
+C:\Users\gargi\anaconda3\Lib\site-packages\sklear
+n\cluster\_kmeans.py:1419: UserWarning: KMeans 
+is known to have a memory leak on Windows with 
+MKL, when there are less chunks than available 
+threads. You can avoid it by setting the 
+environment variable OMP_NUM_THREADS=1.
+  warnings.warn(
+C:\Users\gargi\anaconda3\Lib\site-packages\sklear
+n\cluster\_kmeans.py:1419: UserWarning: KMeans 
+is known to have a memory leak on Windows with 
+MKL, when there are less chunks than available 
+threads. You can avoid it by setting the 
+environment variable OMP_NUM_THREADS=1.
+  warnings.warn(
+C:\Users\gargi\anaconda3\Lib\site-packages\sklear
+n\cluster\_kmeans.py:1419: UserWarning: KMeans 
+is known to have a memory leak on Windows with 
+MKL, when there are less chunks than available 
+threads. You can avoid it by setting the 
+environment variable OMP_NUM_THREADS=1.
+  warnings.warn(
+C:\Users\gargi\anaconda3\Lib\site-packages\sklear
+n\cluster\_kmeans.py:1419: UserWarning: KMeans 
+is known to have a memory leak on Windows with 
+MKL, when there are less chunks than available 
+threads. You can avoid it by setting the 
+environment variable OMP_NUM_THREADS=1.
+  warnings.warn(
