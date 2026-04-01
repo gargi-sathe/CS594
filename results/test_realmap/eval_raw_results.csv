@@ -1,4 +1,0 @@
-scenario_id,bucket,method,selected_warehouse_node_ids,on_time_delivery_rate,delivered_success_rate,p90_delivery_time,p95_delivery_time,orders_missed_or_unserved,simple_cost_estimate,cost_per_order,driver_utilization
-MockPlace_42,MockPlace,Random,"[11, 8]",1.0,1.0,2.25,2.25,0,252.5,28.055555555555557,0.23255966269359013
-MockPlace_42,MockPlace,Clustering,"[11, 12]",1.0,1.0,2.2500000000000018,2.2500000000000018,0,252.5,28.055555555555557,0.2344115145454419
-MockPlace_42,MockPlace,Greedy,"[11, 12]",1.0,1.0,2.2500000000000018,2.2500000000000018,0,252.5,28.055555555555557,0.2344115145454419

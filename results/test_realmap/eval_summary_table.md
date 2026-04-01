@@ -1,6 +1,0 @@
-# Evaluation Summary Table
-| bucket    | method     |   on_time_delivery_rate |   delivered_success_rate |   p90_delivery_time |   p95_delivery_time |   orders_missed_or_unserved |   cost_per_order |   driver_utilization |
-|:----------|:-----------|------------------------:|-------------------------:|--------------------:|--------------------:|----------------------------:|-----------------:|---------------------:|
-| MockPlace | Clustering |                       1 |                        1 |                2.25 |                2.25 |                           0 |          28.0556 |             0.234412 |
-| MockPlace | Greedy     |                       1 |                        1 |                2.25 |                2.25 |                           0 |          28.0556 |             0.234412 |
-| MockPlace | Random     |                       1 |                        1 |                2.25 |                2.25 |                           0 |          28.0556 |             0.23256  |

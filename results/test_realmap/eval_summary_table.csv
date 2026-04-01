@@ -1,4 +1,0 @@
-bucket,method,on_time_delivery_rate,delivered_success_rate,p90_delivery_time,p95_delivery_time,orders_missed_or_unserved,cost_per_order,driver_utilization
-MockPlace,Clustering,1.0,1.0,2.2500000000000018,2.2500000000000018,0.0,28.055555555555557,0.2344115145454419
-MockPlace,Greedy,1.0,1.0,2.2500000000000018,2.2500000000000018,0.0,28.055555555555557,0.2344115145454419
-MockPlace,Random,1.0,1.0,2.25,2.25,0.0,28.055555555555557,0.23255966269359013

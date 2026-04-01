@@ -1,9 +1,0 @@
-{
-    "delivered_success_rate": 0.9344262295081968,
-    "mode": "synthetic",
-    "on_time_delivery_rate": 0.8360655737704918,
-    "run_id": "synthetic_demo",
-    "seed": 42,
-    "simple_cost_estimate": 2514.0,
-    "total_orders_generated": 61
-}
