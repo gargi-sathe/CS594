@@ -49,7 +49,9 @@ def evaluate_method_on_frozen(scenario: FrozenScenario, method_name: str, method
         from dataclasses import asdict
         cfg_dict = asdict(scenario.config) if hasattr(scenario.config, "__dict__") else {"seed": scenario.seed}
         sampler = ScenarioSampler({"run_config": cfg_dict})
-        env = WarehousePlacementEnv(sampler, max_candidates=len(scenario.candidate_node_ids))
+        # Determine max_candidates from the scenario
+        max_cands = len(scenario.candidate_node_ids)
+        env = WarehousePlacementEnv(sampler, max_candidates=max_cands)
         
         # Override env internals with frozen ones just in case
         env.G = scenario.G
@@ -124,7 +126,13 @@ def generate_frozen_scenarios(base_config_raw: Dict[str, Any], buckets: Dict[str
             
             cfg_parsed = parse_config(cfg_raw)
             sampler = ScenarioSampler(cfg_raw)
-            env = WarehousePlacementEnv(sampler)
+            # Determine max_candidates for the environment
+            if cfg_parsed.map.type == "grid":
+                max_cands = cfg_parsed.map.grid_size[0] * cfg_parsed.map.grid_size[1]
+            else:
+                max_cands = cfg_parsed.map.candidate_subsample_size or 100
+                
+            env = WarehousePlacementEnv(sampler, max_candidates=max_cands)
             env.reset(seed=cfg_seed)
             
             demand_field = {n: env.G.nodes[n].get("demand_weight", 1.0) for n in env.G.nodes()}

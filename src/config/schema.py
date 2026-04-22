@@ -6,6 +6,9 @@ class MapConfig:
     type: str
     grid_size: Optional[List[int]] = None
     osmnx_place: Optional[str] = None
+    candidate_generation_mode: Optional[str] = None
+    candidate_subsample_size: Optional[int] = None
+    demand_distribution: Optional[str] = None
 
 @dataclass
 class EntitiesConfig:

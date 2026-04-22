@@ -62,8 +62,12 @@ def build_candidate_features(
 
     # Graph maximum shortest-path tracking and max degree
     max_dist = 1.0
-    if apsp:
+    if isinstance(apsp, dict) and apsp:
         max_dist = max((dist for row in apsp.values() for dist in row.values()), default=1.0)
+    else:
+        # For lazy caches (real maps), we use the delivery target as a normalization reference
+        # to ensure features remain roughly scaled even if we don't know the diameter of the graph.
+        max_dist = max(config.parameters.delivery_target_mins * 2.0, 1.0)
     max_dist = max(max_dist, 1.0)
     
     max_degree = max((d for n, d in G.degree()), default=1)
@@ -108,12 +112,24 @@ def build_candidate_features(
         sum_of_weights = 0.0
         reachable_demand = 0.0
         if apsp and node in apsp:
-            for target_node, dist in apsp[node].items():
-                w = demand_field.get(target_node, 1.0)
-                weighted_sum += dist * w
-                sum_of_weights += w
-                if dist <= travel_budget:
-                    reachable_demand += w
+            # If lazy (real maps), we only estimate based on candidates to stay ultra-fast.
+            # If dense (grid), we use the full dictionary.
+            if isinstance(apsp, dict):
+                for target_node, dist in apsp[node].items():
+                    w = demand_field.get(target_node, 1.0)
+                    weighted_sum += dist * w
+                    sum_of_weights += w
+                    if dist <= travel_budget:
+                        reachable_demand += w
+            else:
+                # Lazy cache path: estimate using candidates as a proxy for the demand field
+                for target_node in candidates:
+                    dist = apsp[node][target_node]
+                    w = demand_field.get(target_node, 1.0)
+                    weighted_sum += dist * w
+                    sum_of_weights += w
+                    if dist <= travel_budget:
+                        reachable_demand += w
                     
         avg_travel = (weighted_sum / sum_of_weights) if sum_of_weights > 0 else 0.0
         feats[i, 3] = avg_travel / max_dist

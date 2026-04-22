@@ -60,6 +60,14 @@ class WarehousePlacementEnv(gym.Env):
         # All nodes are candidates for now
         self.candidates = list(self.G.nodes())
         
+        # Subsample if requested
+        if config.map.candidate_generation_mode == "random_subsample" and config.map.candidate_subsample_size:
+            target_n = config.map.candidate_subsample_size
+            if len(self.candidates) > target_n:
+                import random
+                rng = random.Random(seed)
+                self.candidates = rng.sample(self.candidates, target_n)
+        
         # Truncate or pad candidates to max_candidates
         if len(self.candidates) > self.max_candidates:
             self.candidates = self.candidates[:self.max_candidates]

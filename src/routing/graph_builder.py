@@ -30,6 +30,16 @@ class RoutingTargetProxy:
         
     def get(self, target, default=float('inf')):
         return self.cache._get_time(self.source, target, default)
+    
+    def __getitem__(self, target):
+        res = self.get(target, default=None)
+        if res is None:
+            raise KeyError(f"No path to {target}")
+        return res
+    
+    def __contains__(self, target):
+        # We assume all nodes in G are reachable or at least valid targets
+        return target in self.cache.G
 
 class RoutingCache:
     """A proxy dictionary mimicking apsp dicts, fetching travel times on-demand robustly."""
@@ -40,6 +50,14 @@ class RoutingCache:
         
     def __getitem__(self, source):
         return RoutingTargetProxy(self, source)
+
+    def __contains__(self, source):
+        return source in self.G
+
+    def get(self, source, default=None):
+        if source in self:
+            return self[source]
+        return default
         
     def _get_time(self, source, target, default):
         key = (source, target)

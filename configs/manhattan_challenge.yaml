@@ -1,0 +1,34 @@
+run_config:
+  seed: 42
+  mode: "real_map"
+  run_horizon_mins: 120.0
+  map:
+    type: "osmnx"
+    osmnx_place: "Manhattan, New York, USA"
+    candidate_generation_mode: "random_subsample"
+    candidate_subsample_size: 25
+    demand_distribution: "hotspot"
+  entities:
+    num_warehouses: 5
+    num_drivers: 20
+  parameters:
+    delivery_target_mins: 15.0
+    pick_pack_time_mins: 2.0
+    order_lambda: 60.0
+  policies:
+    staging: "baseline"
+    dispatch: "baseline"
+  costs:
+    warehouse_base: 500.0
+    driver_hourly: 25.0
+    order_op_cost: 3.0
+  eval:
+    scenarios_per_bucket: 2
+    buckets:
+      Low: 30.0
+      Medium: 60.0
+      High: 120.0
+    output_dir: "results/manhattan_challenge"
+    model_path: "logs/checkpoints/final_model.zip"
+  outputs:
+    output_dir: "results/manhattan"

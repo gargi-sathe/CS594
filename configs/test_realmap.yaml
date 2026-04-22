@@ -9,12 +9,12 @@ run_config:
   eval:
     buckets:
       MockPlace: 15.0
-    model_path: DOES_NOT_EXIST.zip
+    model_path: logs/checkpoints/final_model.zip
     output_dir: results/test_realmap
     scenarios_per_bucket: 1
   map:
     candidate_generation_mode: random_subsample
-    candidate_subsample_size: 4
+    candidate_subsample_size: 25
     demand_distribution: hotspot
     osmnx_place: MockPlace
     type: osmnx
