@@ -154,18 +154,36 @@ def generate_frozen_scenarios(base_config_raw: Dict[str, Any], buckets: Dict[str
             frozen.append(f)
     return frozen
 
-def run_evaluation(config_path: str):
+def run_evaluation(config_path: str, model_path: str = None, output_dir: str = None, run_id: str = None):
     with open(config_path, "r") as f:
         raw_config = yaml.safe_load(f)
         
     cfg = parse_config(raw_config)
-    os.makedirs(cfg.eval.output_dir, exist_ok=True)
+    
+    # Override model path
+    final_model_path = model_path if model_path else cfg.eval.model_path
+    
+    # Determine output directory
+    if output_dir:
+        final_output_dir = output_dir
+    elif model_path:
+        # Default to results/eval/<model_basename>
+        model_name = os.path.splitext(os.path.basename(model_path))[0]
+        final_output_dir = os.path.join("results/eval", model_name)
+    else:
+        final_output_dir = cfg.eval.output_dir
+        
+    if run_id:
+        final_output_dir = os.path.join(final_output_dir, run_id)
+        
+    os.makedirs(final_output_dir, exist_ok=True)
     
     model = None
-    if os.path.exists(cfg.eval.model_path):
-        model = MaskablePPO.load(cfg.eval.model_path)
+    if os.path.exists(final_model_path):
+        model = MaskablePPO.load(final_model_path)
+        print(f"Loaded model from {final_model_path}")
     else:
-        print(f"Warning: RL Model not found at {cfg.eval.model_path}. RL evaluation will be skipped.")
+        print(f"Warning: RL Model not found at {final_model_path}. RL evaluation will be skipped.")
         
     scenarios = generate_frozen_scenarios(raw_config, cfg.eval.buckets, cfg.eval.scenarios_per_bucket)
     
@@ -187,22 +205,40 @@ def run_evaluation(config_path: str):
             all_results.append(res_rl)
             
     df = pd.DataFrame(all_results)
-    df.to_csv(os.path.join(cfg.eval.output_dir, "eval_raw_results.csv"), index=False)
+    df.to_csv(os.path.join(final_output_dir, "eval_raw_results.csv"), index=False)
     
     summary = df.groupby(["bucket", "method"])[
         ["on_time_delivery_rate", "delivered_success_rate", "p90_delivery_time", 
          "p95_delivery_time", "orders_missed_or_unserved", "cost_per_order", "driver_utilization"]
     ].mean().reset_index()
     
-    summary.to_csv(os.path.join(cfg.eval.output_dir, "eval_summary_table.csv"), index=False)
+    summary.to_csv(os.path.join(final_output_dir, "eval_summary_table.csv"), index=False)
     
-    with open(os.path.join(cfg.eval.output_dir, "eval_summary_table.md"), "w") as f:
+    # Save machine-readable summary
+    import json
+    summary_data = {
+        "config_path": config_path,
+        "model_path": final_model_path,
+        "output_dir": final_output_dir,
+        "run_id": run_id,
+        "results": summary.to_dict(orient="records")
+    }
+    with open(os.path.join(final_output_dir, "results_summary.json"), "w") as f:
+        json.dump(summary_data, f, indent=4)
+        
+    with open(os.path.join(final_output_dir, "eval_summary_table.md"), "w") as f:
         f.write("# Evaluation Summary Table\n")
         f.write(summary.to_markdown(index=False))
+        
+    print(f"Evaluation results saved to {final_output_dir}")
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, required=True)
+    parser.add_argument("--config", type=str, required=True, help="Path to evaluation config")
+    parser.add_argument("--model_path", type=str, default=None, help="Override model path")
+    parser.add_argument("--output_dir", type=str, default=None, help="Override output directory")
+    parser.add_argument("--run_id", type=str, default=None, help="Optional run ID for organization")
     args = parser.parse_args()
-    run_evaluation(args.config)
+    
+    run_evaluation(args.config, model_path=args.model_path, output_dir=args.output_dir, run_id=args.run_id)

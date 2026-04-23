@@ -1,0 +1,41 @@
+run_config:
+  seed: 42
+  mode: "synthetic"
+  run_horizon_mins: 120.0
+  map:
+    type: "grid"
+    grid_size: [5, 5]
+  entities:
+    num_warehouses: 3
+    num_drivers: 5
+  parameters:
+    delivery_target_mins: 15.0
+    pick_pack_time_mins: 2.0
+    order_lambda: 30.0
+  policies:
+    staging: "baseline"
+    dispatch: "baseline"
+  costs:
+    warehouse_base: 100.0
+    driver_hourly: 20.0
+    order_op_cost: 2.5
+  outputs:
+    output_dir: "results/robustness/raw"
+  robustness:
+    scenarios_per_type: 3
+    model_path: "logs/checkpoints/serious_iteration_1/rl_model_1000_steps.zip"
+    output_dir: "results/robustness"
+    stress_settings:
+      demand_spike:
+        multiplier: 3.0
+        quadrant: 0
+      driver_shortage:
+        reduction_fraction: 0.6  # 5 drivers -> 2 drivers
+      warehouse_closure:
+        close_at_min: 30.0
+        target_warehouse_id: "W1"
+      time_shift:
+        lambda_profile:
+          - [0, 40, 10.0]   # Morning low
+          - [40, 80, 80.0]  # Lunch peak
+          - [80, 120, 20.0] # Afternoon tapering

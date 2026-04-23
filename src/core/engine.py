@@ -11,6 +11,12 @@ from src.core.driver_process import driver_lifecycle
 def bootstrap_simulation(config: RunConfig) -> SimulatorState:
     env = simpy.Environment()
     
+    # Surgical Hook: Driver Shortage
+    num_drivers = config.entities.num_drivers
+    if config.stress_tests and config.stress_tests.driver_shortage:
+        reduction = config.stress_tests.driver_shortage.get('reduction_fraction', 0.5)
+        num_drivers = max(1, int(num_drivers * (1 - reduction)))
+    
     # 1. Graph Generation dynamically bounds mapping
     if config.map.type == "grid":
         from src.routing.graph_builder import build_synthetic_graph
@@ -43,7 +49,7 @@ def bootstrap_simulation(config: RunConfig) -> SimulatorState:
         state.warehouses[w_id] = Warehouse(id=w_id, location=loc, state=WarehouseState.OPEN)
         
     # 3. Drivers
-    for i in range(config.entities.num_drivers):
+    for i in range(num_drivers):
         d_id = f"D{i+1}"
         w_idx = i % config.entities.num_warehouses
         assigned_w = list(state.warehouses.values())[w_idx]
@@ -56,6 +62,15 @@ def bootstrap_simulation(config: RunConfig) -> SimulatorState:
         )
         
     return state
+
+def closure_process(state: SimulatorState, config: RunConfig):
+    """Surgical Hook: Fails a warehouse mid-run."""
+    settings = config.stress_tests.warehouse_closure
+    yield state.env.timeout(settings.get('close_at_min', 30.0))
+    target = settings.get('target_warehouse_id', 'W1')
+    if target in state.warehouses:
+        state.warehouses[target].state = WarehouseState.CLOSED
+        state.log_event("Warehouse", target, "CLOSED_FOR_ROBUSTNESS", f"time={state.env.now}")
 
 def dispatch_loop(state: SimulatorState, config: RunConfig):
     """
@@ -84,8 +99,13 @@ def run_simulation(config: RunConfig) -> SimulatorState:
     """Holistic wrapper binding strictly initialized config instances to physics pipelines."""
     state = bootstrap_simulation(config)
     # Instantiate concurrent SimPy loops
-    state.env.process(order_generator(state, config.parameters.order_lambda, config.run_horizon_mins))
+    state.env.process(order_generator(state, config.parameters.order_lambda, config.run_horizon_mins, config))
     state.env.process(dispatch_loop(state, config))
+    
+    # Surgical Hook: Warehouse Closure
+    if config.stress_tests and config.stress_tests.warehouse_closure:
+        state.env.process(closure_process(state, config))
+        
     # Begin bounds limit evaluation
     state.env.run(until=config.run_horizon_mins)
     return state

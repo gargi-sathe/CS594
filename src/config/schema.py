@@ -66,12 +66,14 @@ class TrainingConfig:
     device: str = "auto"
     tensorboard_log_name: str = "MaskablePPO"
     seed: int = 42
+    robust_training: Optional[Dict[str, Any]] = None
 
 @dataclass
 class StressTestConfig:
     warehouse_closure: Optional[Dict[str, Any]] = None
     driver_shortage: Optional[Dict[str, Any]] = None
     demand_spike: Optional[Dict[str, Any]] = None
+    time_shift: Optional[Dict[str, Any]] = None
 
 @dataclass
 class RunConfig:

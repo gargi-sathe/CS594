@@ -1,0 +1,39 @@
+run_config:
+  seed: 42
+  mode: "synthetic"
+  run_horizon_mins: 120.0
+  map:
+    type: "grid"
+    grid_size: [5, 5]
+  entities:
+    num_warehouses: 3
+    num_drivers: 5
+  parameters:
+    delivery_target_mins: 15.0
+    pick_pack_time_mins: 2.0
+    order_lambda: 30.0
+  policies:
+    staging: "baseline"
+    dispatch: "baseline"
+  costs:
+    warehouse_base: 100.0
+    driver_hourly: 20.0
+    order_op_cost: 2.5
+  outputs:
+    output_dir: "results/robust_pilot_warm"
+  training:
+    total_timesteps: 1000
+    checkpoint_freq: 500
+    log_dir: "logs/tb/robust_pilot"
+    checkpoint_dir: "logs/checkpoints/robust_pilot"
+    tensorboard_log_name: "WarmStart_Robust"
+    learning_rate: 0.0001
+    n_steps: 256
+    batch_size: 64
+    robust_training:
+      prob_stress: 0.5
+      stress_types:
+        demand_spike: 0.25
+        driver_shortage: 0.25
+        warehouse_closure: 0.25
+        time_shift: 0.25

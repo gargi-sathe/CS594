@@ -1,0 +1,45 @@
+run_config:
+  seed: 42
+  mode: "synthetic"
+  run_horizon_mins: 120.0
+  map:
+    type: "grid"
+    grid_size: [5, 5]
+  entities:
+    num_warehouses: 3
+    num_drivers: 5
+  parameters:
+    delivery_target_mins: 15.0
+    pick_pack_time_mins: 2.0
+    order_lambda: 30.0
+  policies:
+    staging: "baseline"
+    dispatch: "baseline"
+  costs:
+    warehouse_base: 100.0
+    driver_hourly: 20.0
+    order_op_cost: 2.5
+  outputs:
+    output_dir: "results/pilot_C2"
+  reward_weights:
+    weight_on_time: 2.0
+    weight_delivered_success: 0.5
+    weight_missed_rate: 6.0  # Strong increase
+    weight_tail_penalty: 0.5
+    weight_cost: 0.0        # No cost weight
+  training:
+    total_timesteps: 2000
+    checkpoint_freq: 1000
+    log_dir: "logs/tb/pilot_C"
+    checkpoint_dir: "logs/checkpoints/pilot_C"
+    tensorboard_log_name: "Pilot_C2_Strong"
+    learning_rate: 0.00005  # Fine-tuning rate
+    n_steps: 256
+    batch_size: 64
+    robust_training:
+      prob_stress: 0.5
+      stress_types:
+        demand_spike: 0.25
+        driver_shortage: 0.25
+        warehouse_closure: 0.25
+        time_shift: 0.25

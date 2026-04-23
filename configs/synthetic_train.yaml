@@ -1,0 +1,50 @@
+run_config:
+  seed: 42
+  mode: "synthetic"
+  run_horizon_mins: 120.0
+  map:
+    type: "grid"
+    grid_size: [5, 5]
+  entities:
+    num_warehouses: 3
+    num_drivers: 5
+  parameters:
+    delivery_target_mins: 15.0
+    pick_pack_time_mins: 2.0
+    order_lambda: 30.0
+  policies:
+    staging: "baseline"
+    dispatch: "baseline"
+  costs:
+    warehouse_base: 100.0
+    driver_hourly: 20.0
+    order_op_cost: 2.5
+  reward_weights:
+    weight_on_time: 2.0
+    weight_delivered_success: 0.5
+    weight_missed_rate: 1.0
+    weight_tail_penalty: 0.5
+    weight_cost: 0.1
+    cost_norm_ref: 100.0
+  training:
+    total_timesteps: 10000
+    checkpoint_freq: 1000
+    log_dir: "logs/tb/"
+    checkpoint_dir: "logs/checkpoints/"
+    learning_rate: 0.0003
+    n_steps: 64
+    batch_size: 64
+    policy_name: "MultiInputPolicy"
+    device: "cpu"
+    tensorboard_log_name: "MaskablePPO_train"
+    seed: 42
+  outputs:
+    output_dir: "results/train"
+  eval:
+    buckets:
+      Low: 15.0
+      Medium: 30.0
+      High: 60.0
+    model_path: "logs/checkpoints/final_model.zip"
+    output_dir: "results/eval/final_model"
+    scenarios_per_bucket: 2

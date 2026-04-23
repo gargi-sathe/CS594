@@ -1,0 +1,31 @@
+run_config:
+  seed: 42
+  mode: "synthetic"
+  run_horizon_mins: 120.0
+  map:
+    type: "grid"
+    grid_size: [5, 5]
+  entities:
+    num_warehouses: 3
+    num_drivers: 5
+  parameters:
+    delivery_target_mins: 15.0
+    pick_pack_time_mins: 2.0
+    order_lambda: 30.0
+  policies:
+    staging: "baseline"
+    dispatch: "baseline"
+  costs:
+    warehouse_base: 100.0
+    driver_hourly: 20.0
+    order_op_cost: 2.5
+  eval:
+    buckets:
+      Low: 15.0
+      Medium: 30.0
+      High: 60.0
+    model_path: "logs/checkpoints/serious_iteration_1/final_model.zip"
+    output_dir: "results/phase1_selection"
+    scenarios_per_bucket: 5
+  outputs:
+    output_dir: "results/phase1_selection/raw"
