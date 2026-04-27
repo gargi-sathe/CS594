@@ -1,0 +1,40 @@
+run_config:
+  seed: 42
+  mode: "synthetic"
+  run_horizon_mins: 120.0
+  map:
+    type: "osmnx"
+    osmnx_place: "Loop, Chicago, Illinois, USA" # Default, will be overridden
+    candidate_generation_mode: "random_subsample"
+    candidate_subsample_size: 25
+  entities:
+    num_warehouses: 3
+    num_drivers: 5
+  parameters:
+    delivery_target_mins: 15.0
+    pick_pack_time_mins: 2.0
+    order_lambda: 30.0
+  policies:
+    staging: "baseline"
+    dispatch: "baseline"
+  costs:
+    warehouse_base: 100.0
+    driver_hourly: 20.0
+    order_op_cost: 2.5
+  outputs:
+    output_dir: "results/chicago_expansion"
+  robustness:
+    model_path: "logs/checkpoints/chicago_realmap/chicago_scratch_24k/rl_model_18240_steps.zip"
+    output_dir: "results/chicago_expansion"
+    scenarios_per_type: 3
+    stress_settings:
+      demand_spike:
+        multiplier: 3.0
+        quadrant: 0 
+      driver_shortage:
+        reduction_fraction: 0.5
+      warehouse_closure:
+        close_at_min: 30.0
+        target_warehouse_id: "W-1"
+      time_shift:
+        lambda_profile: [[0, 30, 10], [30, 90, 50], [90, 120, 20]]

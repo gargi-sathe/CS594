@@ -1,0 +1,46 @@
+run_config:
+  seed: 42
+  mode: "synthetic"
+  run_horizon_mins: 120.0
+  map:
+    type: "osmnx"
+    osmnx_place: "Loop, Chicago, Illinois, USA" # Base
+    candidate_generation_mode: "random_subsample"
+    candidate_subsample_size: 25
+  entities:
+    num_warehouses: 3
+    num_drivers: 5
+  parameters:
+    delivery_target_mins: 15.0
+    pick_pack_time_mins: 2.0
+    order_lambda: 30.0
+  reward_weights:
+    weight_on_time: 2.0
+    weight_delivered_success: 0.5
+    weight_missed_rate: 6.0
+    weight_tail_penalty: 0.5
+    weight_cost: 0.0
+  training:
+    policy_name: "MultiInputPolicy"
+    total_timesteps: 10000
+    checkpoint_freq: 5000
+    learning_rate: 0.0003
+    n_steps: 2048
+    batch_size: 64
+    device: "auto"
+    log_dir: "logs/tb/chicago_multizone"
+    checkpoint_dir: "logs/checkpoints/chicago_multizone"
+    tensorboard_log_name: "mz_run_v1"
+    multi_zone_list:
+      - osmnx_place: "Loop, Chicago, Illinois, USA"
+        num_warehouses: 3
+        num_drivers: 5
+      - osmnx_place: "Near North Side, Chicago, Illinois, USA"
+        num_warehouses: 3
+        num_drivers: 5
+      - osmnx_place: "Hyde Park, Chicago, Illinois, USA"
+        num_warehouses: 3
+        num_drivers: 5
+      - osmnx_place: "Near West Side, Chicago, Illinois, USA"
+        num_warehouses: 5
+        num_drivers: 8

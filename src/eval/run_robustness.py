@@ -107,12 +107,11 @@ def closure_process(state: SimulatorState, settings: dict):
 
 # --- Core Robustness Engine ---
 
-def run_stress_test(config_path, stress_type, settings, model=None, method_callable=None, seed=42):
+def run_stress_test(config_dict, stress_type, settings, model=None, method_callable=None, seed=42):
     """
     Runs a single simulation with injected stress.
     """
-    with open(config_path, "r") as f:
-        raw_config = yaml.safe_load(f)
+    raw_config = copy.deepcopy(config_dict)
     
     # Apply Driver Shortage before bootstrap
     if stress_type == "driver_shortage":
@@ -199,11 +198,21 @@ def main():
     parser.add_argument("--config", type=str, default="configs/eval_robustness.yaml")
     parser.add_argument("--model_path", type=str, default=None)
     parser.add_argument("--output_dir", type=str, default=None)
+    parser.add_argument("--osmnx_place", type=str, default=None)
+    parser.add_argument("--num_warehouses", type=int, default=None)
+    parser.add_argument("--num_drivers", type=int, default=None)
     args = parser.parse_args()
 
     config_path = args.config
     with open(config_path, "r") as f:
         full_cfg = yaml.safe_load(f)
+    
+    if args.osmnx_place:
+        full_cfg['run_config']['map']['osmnx_place'] = args.osmnx_place
+    if args.num_warehouses:
+        full_cfg['run_config']['entities']['num_warehouses'] = args.num_warehouses
+    if args.num_drivers:
+        full_cfg['run_config']['entities']['num_drivers'] = args.num_drivers
     
     rob_cfg = full_cfg['run_config']['robustness']
     
@@ -234,7 +243,7 @@ def main():
         for seed in range(42, 42 + n_seeds):
             for m_name, (m_obj, m_func) in methods.items():
                 print(f"  Testing {m_name} (seed {seed})...")
-                res = run_stress_test(config_path, s_type, settings, model=m_obj, method_callable=m_func, seed=seed)
+                res = run_stress_test(full_cfg, s_type, settings, model=m_obj, method_callable=m_func, seed=seed)
                 res["method"] = m_name
                 all_raw_results.append(res)
                 
