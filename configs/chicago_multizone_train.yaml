@@ -31,8 +31,8 @@ run_config:
     weight_cost: 0.0
   training:
     policy_name: "MultiInputPolicy"
-    total_timesteps: 2000 # For smoke
-    checkpoint_freq: 1000
+    total_timesteps: 10000
+    checkpoint_freq: 2000
     learning_rate: 0.0003
     n_steps: 2048
     batch_size: 64
