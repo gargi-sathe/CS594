@@ -66,6 +66,7 @@ class TrainingConfig:
     device: str = "auto"
     tensorboard_log_name: str = "MaskablePPO"
     seed: int = 42
+    multi_zone_list: Optional[List[Dict[str, Any]]] = None
     robust_training: Optional[Dict[str, Any]] = None
 
 @dataclass
