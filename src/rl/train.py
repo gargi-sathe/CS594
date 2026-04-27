@@ -37,9 +37,12 @@ def run_training(config_path: str, override_seed: int = None, load_path: str = N
     if config.map.type == "grid":
         grid_w, grid_h = config.map.grid_size
         max_cands = grid_w * grid_h
+    elif config.map.candidate_subsample_size:
+        max_cands = config.map.candidate_subsample_size
     else:
         max_cands = 100
         
+    print(f"Initializing environment with max_candidates={max_cands}")
     env = WarehousePlacementEnv(sampler, max_candidates=max_cands)
     
     checkpoint_callback = CheckpointCallback(

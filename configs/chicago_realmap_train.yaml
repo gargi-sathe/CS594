@@ -1,0 +1,42 @@
+run_config:
+  seed: 42
+  mode: "synthetic"
+  run_horizon_mins: 120.0
+  map:
+    type: "osmnx"
+    osmnx_place: "Loop, Chicago, Illinois, USA"
+    candidate_generation_mode: "random_subsample"
+    candidate_subsample_size: 25
+  entities:
+    num_warehouses: 3
+    num_drivers: 5
+  parameters:
+    delivery_target_mins: 15.0
+    pick_pack_time_mins: 2.0
+    order_lambda: 30.0
+  policies:
+    staging: "baseline"
+    dispatch: "baseline"
+  costs:
+    warehouse_base: 100.0
+    driver_hourly: 20.0
+    order_op_cost: 2.5
+  outputs:
+    output_dir: "results/chicago_realmap"
+  reward_weights:
+    weight_on_time: 2.0
+    weight_delivered_success: 0.5
+    weight_missed_rate: 6.0
+    weight_tail_penalty: 0.5
+    weight_cost: 0.0
+  training:
+    total_timesteps: 14000
+    checkpoint_freq: 4000
+    log_dir: "logs/tb/chicago_realmap"
+    checkpoint_dir: "logs/checkpoints/chicago_realmap"
+    tensorboard_log_name: "Chicago_Scratch_24k"
+    learning_rate: 0.0001 # Reduced learning rate for fine-tuning
+    n_steps: 512
+    batch_size: 128
+    device: "cpu"
+    policy_name: "MultiInputPolicy"

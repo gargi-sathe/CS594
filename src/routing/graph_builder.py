@@ -74,24 +74,37 @@ class RoutingCache:
             self._cache[key] = default
             return default
 
+_osmnx_cache = {}
+
 def build_osmnx_graph(place_name: str) -> Tuple[nx.Graph, Any]:
     import osmnx as ox
+    
+    global _osmnx_cache
+    if place_name in _osmnx_cache:
+        return _osmnx_cache[place_name]
+        
+    print(f"Loading OSMnx graph for {place_name}...")
     try:
-        # Load explicit physical boundary maps mapping drives cleanly
         params = {"network_type": "drive"}
         G = ox.graph_from_place(place_name, **params)
     except Exception:
-        # Immutable fallback guaranteeing success gracefully if place_name bounds resolve erratically
-        G = ox.graph_from_point((37.8229, -122.2359), dist=500, network_type='drive')
+        print(f"OSMnx lookup failed for {place_name}, using fallback.")
+        G = ox.graph_from_point((41.8781, -87.6298), dist=1000, network_type='drive') # Loop center
         
-    # Convert reliably to pure undirected Graph
     G = nx.Graph(G)
     nodes = max(nx.connected_components(G), key=len)
     G = G.subgraph(nodes).copy()
     
+    # Pre-add node coords
+    for n, d in G.nodes(data=True):
+        if 'x' not in d or 'y' not in d:
+            # osmnx nodes usually have 'x' (lon) and 'y' (lat)
+            pass
+
     for u, v, data in G.edges(data=True):
         if 'length' not in data:
             data['length'] = 50.0 
             
     routing_proxy = RoutingCache(G, speed_mps=10.0)
+    _osmnx_cache[place_name] = (G, routing_proxy)
     return G, routing_proxy

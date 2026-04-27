@@ -26,7 +26,7 @@ def robust_order_generator(state: SimulatorState, config: dict, stress_type: str
     Injected order generator that handles Spikes and Time-Shifts.
     """
     nodes = list(state.graph.nodes)
-    grid_size = config['run_config']['map']['grid_size']
+    grid_size = config['run_config']['map'].get('grid_size')
     horizon = config['run_config']['run_horizon_mins']
     
     order_id_counter = 0
@@ -53,21 +53,28 @@ def robust_order_generator(state: SimulatorState, config: dict, stress_type: str
         if state.env.now >= horizon:
             break
             
-        # 2. Handle Spatial Spike
+    # 2. Handle Spatial Spike
         loc = random.choice(nodes)
         if stress_type == "demand_spike":
-            # Grid mapping: loc is an int.
-            # Assuming 5x5 grid and row-major mapping from nx.grid_2d_graph relabeling
-            width = grid_size[0]
-            x = loc // width
-            y = loc % width
-            
-            quad = settings['quadrant']
             multiplier = settings['multiplier']
+            quad = settings['quadrant']
             
-            # Check if loc is in target quadrant
             in_quad = False
-            mid_x, mid_y = grid_size[0] / 2, grid_size[1] / 2
+            if config['run_config']['map']['type'] == "grid":
+                width = grid_size[0]
+                x = loc // width
+                y = loc % width
+                mid_x, mid_y = grid_size[0] / 2, grid_size[1] / 2
+            else:
+                # Real map: use node attributes x/y
+                node_data = state.graph.nodes[loc]
+                x = node_data.get('x', 0)
+                y = node_data.get('y', 0)
+                # For Chicago Loop, we'll estimate midpoints based on graph extent
+                xs = [d.get('x', 0) for n, d in state.graph.nodes(data=True)]
+                ys = [d.get('y', 0) for n, d in state.graph.nodes(data=True)]
+                mid_x, mid_y = (min(xs) + max(xs))/2, (min(ys) + max(ys))/2
+
             if quad == 0 and x < mid_x and y < mid_y: in_quad = True
             elif quad == 1 and x >= mid_x and y < mid_y: in_quad = True
             elif quad == 2 and x < mid_x and y >= mid_y: in_quad = True
