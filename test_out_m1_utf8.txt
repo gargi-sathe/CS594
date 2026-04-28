@@ -1,9 +1,0 @@
-﻿============================= test session starts =============================
-platform win32 -- Python 3.12.7, pytest-7.4.4, pluggy-1.0.0
-rootdir: C:\Users\gargi\OneDrive\Desktop\Masters\Work\CS594\project
-plugins: anyio-4.9.0, dash-3.0.3, langsmith-0.3.18, typeguard-4.4.4
-collected 4 items
-
-tests\test_phase1_env.py ....                                            [100%]
-
-============================== 4 passed in 8.12s ==============================
